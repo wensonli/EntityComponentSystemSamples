@@ -3,101 +3,108 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Physics.Stateful;
+using Unity.Physics.Systems;
 using UnityEngine;
 
 /// <summary>
-/// when player collider with npc, send message to UI show dialog
+/// when player collider with npc, send event to UI to show dialog
 /// </summary>
+/// 
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateAfter(typeof(TriggerEventConversionSystem))]
 public partial class NpcShowDialogSystem : SystemBase
 {
+    private EndFixedStepSimulationEntityCommandBufferSystem m_CommandBufferSystem;
     private TriggerEventConversionSystem m_TriggerSystem;
-
     private EntityQueryMask m_NonTriggerMask;
-
-    private EntityQuery m_Npc;
 
     protected override void OnCreate()
     {
+        m_CommandBufferSystem = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
         m_TriggerSystem = World.GetOrCreateSystem<TriggerEventConversionSystem>();
-
         m_NonTriggerMask = EntityManager.GetEntityQueryMask(
             GetEntityQuery(new EntityQueryDesc
             {
                 None = new ComponentType[]
                 {
-                    typeof(StatefulCollisionEvent)
+                    typeof(StatefulTriggerEvent)
                 }
             })
         );
 
-        m_Npc = GetEntityQuery(ComponentType.ReadWrite<NpcComponent>());
-        //We wait to update until we have our converted entities
-        RequireForUpdate(m_Npc);
 
-        Debug.LogError("liwen NpcShowDialogSystem OnCreate ");
+        RequireForUpdate(GetEntityQuery(new EntityQueryDesc
+        {
+            All = new ComponentType[]
+            {
+                typeof(StatefulTriggerEvent)
+            }
+        }));
+
     }
     protected override void OnUpdate()
     {
+
+        Dependency = JobHandle.CombineDependencies(m_TriggerSystem.OutDependency, Dependency);
+
+        var commandBuffer = m_CommandBufferSystem.CreateCommandBuffer();
 
         // Need this extra variable here so that it can
         // be captured by Entities.ForEach loop below
         var nonTriggerMask = m_NonTriggerMask;
 
-        //We grab all the player scores because we don't know who will need to be assigned points
-        var npcEntities = m_Npc.ToEntityArray(Allocator.TempJob);
-        var npcComponent = GetComponentDataFromEntity<NpcComponent>();
-
         //We need to dispose our entities
         Entities
-        .WithDisposeOnCompletion(npcEntities)
         .WithName("ShowNpcDialogOnTriggerEnter")
-        .ForEach((Entity e, ref DynamicBuffer<StatefulCollisionEvent> triggerEventBuffer) =>
+        .WithBurst()
+        .ForEach((Entity e, ref DynamicBuffer<StatefulTriggerEvent> triggerEventBuffer) =>
         {
 
             for (int i = 0; i < triggerEventBuffer.Length; i++)
             {
-                //Here we grab our bullet entity and the other entity it collided with
                 var triggerEvent = triggerEventBuffer[i];
                 var otherEntity = triggerEvent.GetOtherEntity(e);
 
-                var isPlayTag = HasComponent<PlayerTag>(otherEntity);
+              
 
-                Debug.LogError("liwen other is player  " + isPlayTag);
                 // exclude other triggers and processed events
-                if (triggerEvent.CollidingState == EventCollidingState.Stay || !isPlayTag)
+                if (triggerEvent.State == EventOverlapState.Stay)
                 {
                     continue;
                 }
 
-                //We want our code to run on the first intersection of Bullet and other entity
-                else if (triggerEvent.CollidingState == EventCollidingState.Enter)
+                if (triggerEvent.State == EventOverlapState.Enter)
                 {
-                    for (int j = 0; j < npcEntities.Length; j++)
+
+                    if (HasComponent<NpcComponent>(triggerEvent.EntityB))
                     {
-                        var currentPlayScoreComponent = npcComponent[npcEntities[j]];
+                        var npcComponent = GetComponent<NpcComponent>(triggerEvent.EntityB);
+                        npcComponent.showDialog = true;
 
-                        //We create a new component with updated values
-                        var newPlayerScore = new NpcComponent
-                        {
-                            id = currentPlayScoreComponent.id,
-                            name = currentPlayScoreComponent.name,
-                            showDialog = true
-                        };
-
-                        Debug.LogError("liwen set npc showDialog true");
-                        npcComponent[npcEntities[j]] = newPlayerScore;
+                        commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponent);
                     }
-  
+
+
                 }
                 else
                 {
-                    continue;
+                    // State == PhysicsEventState.Exit
+                    if (HasComponent<NpcComponent>(triggerEvent.EntityB))
+                    {
+                        var npcComponent = GetComponent<NpcComponent>(triggerEvent.EntityB);
+                        npcComponent.showDialog = false;
+
+                        commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponent);
+                    }
                 }
             }
+
+            
         }).Schedule();
 
-
+        m_CommandBufferSystem.AddJobHandleForProducer(Dependency);
     }
 
  

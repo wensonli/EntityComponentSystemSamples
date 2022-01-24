@@ -20,7 +20,7 @@ namespace NpcSystem
 
         public void SetReceivedEntity(Entity entity)
         {
-            if (World.DefaultGameObjectInjectionWorld.EntityManager.HasComponent<StatefulCollisionEvent>(entity))
+            if (World.DefaultGameObjectInjectionWorld.EntityManager.HasComponent<StatefulTriggerEvent>(entity))
             {
                 m_CollisionEventEntity = entity;
             }
@@ -40,7 +40,7 @@ namespace NpcSystem
             }
 
             var pos = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<Translation>(m_DisplayEntity);
-            var buffer = World.DefaultGameObjectInjectionWorld.EntityManager.GetBuffer<StatefulCollisionEvent>(m_CollisionEventEntity);
+            var buffer = World.DefaultGameObjectInjectionWorld.EntityManager.GetBuffer<StatefulTriggerEvent>(m_CollisionEventEntity);
 
             var transform = GetComponent<Transform>();
             var textMesh = GetComponent<TextMesh>();
@@ -53,15 +53,15 @@ namespace NpcSystem
                     continue;
                 }
 
-                switch (collisionEvent.CollidingState)
+                switch (collisionEvent.State)
                 {
-                    case EventCollidingState.Enter:
+                    case EventOverlapState.Enter:
                         m_CollisionDurationCount = 0;
                         m_FramesSinceCollisionExit = 0;
                         textMesh.text = "Hello";
                         textMesh.color = Color.red;
                         break;
-                    case EventCollidingState.Stay:
+                    case EventOverlapState.Stay:
 /*                        textMesh.text = "";
                         if (m_CollisionDurationCount++ < k_FramesToStay)
                         {
@@ -73,7 +73,7 @@ namespace NpcSystem
                         }
                         textMesh.text += "Collision Stay " + m_CollisionDurationCount + " frames.";*/
                         break;
-                    case EventCollidingState.Exit:
+                    case EventOverlapState.Exit:
                         textMesh.text = "";
                         /*                        m_FramesSinceCollisionExit++;
                                                 textMesh.text = "Collision lasted " + m_CollisionDurationCount + " frames.";

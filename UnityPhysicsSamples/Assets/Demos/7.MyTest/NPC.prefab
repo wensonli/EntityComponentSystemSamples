@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 39934511310600741}
   - component: {fileID: 39934511310600747}
   - component: {fileID: 39934511310600740}
-  - component: {fileID: 39934511310600737}
   - component: {fileID: 39934511310600739}
   - component: {fileID: 4918068251034113317}
   - component: {fileID: 6392402123483761464}
+  - component: {fileID: 4802791372944136209}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccea9ea98e38942e0b0938c27ed1903e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MotionType: 0
+  m_MotionType: 2
   m_Smoothing: 0
   m_Mass: 1
   m_LinearDamping: 0.01
@@ -187,7 +187,7 @@ MonoBehaviour:
     m_Template: {fileID: 0}
     m_CollisionResponse:
       m_Override: 0
-      m_Value: 1
+      m_Value: 3
     m_Friction:
       m_Override: 0
       m_Value:
@@ -294,19 +294,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
---- !u!114 &39934511310600737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 39934511310600746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a444254202384e4ea55b4fe97742fbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CalculateDetails: 0
 --- !u!114 &39934511310600739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,6 +389,7 @@ MonoBehaviour:
       byte0059: 0
       byte0060: 0
       byte0061: 0
+  showDialog: 0
 --- !u!114 &6392402123483761464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,3 +407,15 @@ MonoBehaviour:
   VisionAngleDegrees: 45
   VisionMaxDistance: 5
   MovementSpeedMetersPerSecond: 3
+--- !u!114 &4802791372944136209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39934511310600746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71242163ba188c04b8b904b94ff79242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

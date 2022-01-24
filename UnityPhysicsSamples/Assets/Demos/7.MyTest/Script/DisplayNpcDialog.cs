@@ -26,18 +26,23 @@ public class DisplayNpcDialog : MonoBehaviour, IReceiveEntity
     // Update is called once per frame
     void Update()
     {
+
         if (!World.DefaultGameObjectInjectionWorld.IsCreated ||
             !World.DefaultGameObjectInjectionWorld.EntityManager.Exists(m_NpcEntity))
         {
             return;
         }
 
+
         var npcData = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<NpcComponent>(m_NpcEntity);
 
         if (npcData.showDialog)
         {
             text.text = $"Hello player, I am NPC {npcData.id}";
-
+        }
+        else
+        {
+            text.text = "";
         }
 
        
