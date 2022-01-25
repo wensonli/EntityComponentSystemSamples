@@ -8,6 +8,14 @@ using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
 using UnityEngine;
 
+
+/// <summary>
+/// show dialog
+/// </summary>
+public struct NpcShowDialogComponent : IComponentData
+{
+}
+
 /// <summary>
 /// when player collider with npc, send event to UI to show dialog
 /// </summary>
@@ -80,10 +88,8 @@ public partial class NpcShowDialogSystem : SystemBase
 
                     if (HasComponent<NpcComponent>(triggerEvent.EntityB))
                     {
-                        var npcComponent = GetComponent<NpcComponent>(triggerEvent.EntityB);
-                        npcComponent.showDialog = true;
-
-                        commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponent);
+                        var showDialogComp = new NpcShowDialogComponent() ;
+                        commandBuffer.AddComponent<NpcShowDialogComponent>(triggerEvent.EntityB, showDialogComp);
                     }
 
 
@@ -93,10 +99,7 @@ public partial class NpcShowDialogSystem : SystemBase
                     // State == PhysicsEventState.Exit
                     if (HasComponent<NpcComponent>(triggerEvent.EntityB))
                     {
-                        var npcComponent = GetComponent<NpcComponent>(triggerEvent.EntityB);
-                        npcComponent.showDialog = false;
-
-                        commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponent);
+                        commandBuffer.RemoveComponent<NpcShowDialogComponent>(triggerEvent.EntityB);
                     }
                 }
             }

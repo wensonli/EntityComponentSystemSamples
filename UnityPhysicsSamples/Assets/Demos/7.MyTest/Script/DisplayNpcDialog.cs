@@ -5,17 +5,12 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayNpcDialog : MonoBehaviour, IReceiveEntity
+public class DisplayNpcDialog : MonoBehaviour
 {
 
     public Text text;
 
-    private Entity m_NpcEntity;
-
-    public void SetReceivedEntity(Entity entity)
-    {
-        m_NpcEntity = entity;
-    }
+    private Entity showDialogNpc;
 
     // Start is called before the first frame update
     void Start()
@@ -27,24 +22,42 @@ public class DisplayNpcDialog : MonoBehaviour, IReceiveEntity
     void Update()
     {
 
-        if (!World.DefaultGameObjectInjectionWorld.IsCreated ||
-            !World.DefaultGameObjectInjectionWorld.EntityManager.Exists(m_NpcEntity))
+        if (!World.DefaultGameObjectInjectionWorld.IsCreated)
         {
             return;
         }
 
 
-        var npcData = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<NpcComponent>(m_NpcEntity);
+        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        var entites = entityManager.GetAllEntities() ;
 
-        if (npcData.showDialog)
+        for (int i = 0; i < entites.Length; i++)
         {
-            text.text = $"Hello player, I am NPC {npcData.id}";
+            var hasDialog = entityManager.HasComponent<NpcShowDialogComponent>(entites[i]);
+
+            if (hasDialog)
+            {
+                var npcData = entityManager.GetComponentData<NpcComponent>(entites[i]);
+
+                text.text = $"{npcData.dialogContent}";
+                showDialogNpc = entites[i];
+
+                StartCoroutine(disapearDialog(showDialogNpc, npcData.showDialogDuration));
+                break;
+            }
         }
-        else
+
+        entites.Dispose();
+
+
+        IEnumerator disapearDialog(Entity entity, float duration)
         {
+            yield return new WaitForSeconds(duration);
+
+            World.DefaultGameObjectInjectionWorld.EntityManager.RemoveComponent<NpcShowDialogComponent>(entity);
+
             text.text = "";
         }
 
-       
     }
 }

@@ -7,12 +7,13 @@ using UnityEngine;
 
 namespace NpcSystem
 {
-    [GenerateAuthoringComponent]
+
     public struct NpcComponent : IComponentData
     {
         public int id;
-        public FixedString64 name;
-        public bool showDialog;
+        public long showDialogDuration;
+        public FixedString64 nickName;
+        public FixedString128 dialogContent;
     }
 
 
