@@ -90,6 +90,10 @@ public partial class NpcShowDialogSystem : SystemBase
                     {
                         var showDialogComp = new NpcShowDialogComponent() ;
                         commandBuffer.AddComponent<NpcShowDialogComponent>(triggerEvent.EntityB, showDialogComp);
+
+                        var npcComponentData = GetComponent<NpcComponent>(triggerEvent.EntityB);
+                        npcComponentData.animalState = State.BOUNCE;
+                        commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponentData);
                     }
 
 
@@ -100,6 +104,10 @@ public partial class NpcShowDialogSystem : SystemBase
                     if (HasComponent<NpcComponent>(triggerEvent.EntityB))
                     {
                         commandBuffer.RemoveComponent<NpcShowDialogComponent>(triggerEvent.EntityB);
+
+                        var npcComponentData = GetComponent<NpcComponent>(triggerEvent.EntityB);
+                        npcComponentData.animalState = State.IDLE;
+                        commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponentData);
                     }
                 }
             }

@@ -323,6 +323,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   nickName: 
+  dialogContent: 
+  showDialogDuration: 5
   txtNickName: {fileID: 0}
 --- !u!114 &6392402123483761464
 MonoBehaviour:

@@ -14,9 +14,15 @@ namespace NpcSystem
         public long showDialogDuration;
         public FixedString64 nickName;
         public FixedString128 dialogContent;
+
+        public State animalState;
     }
 
-
+    public enum State
+    {
+        IDLE,
+        BOUNCE
+    }
 
 }
 
