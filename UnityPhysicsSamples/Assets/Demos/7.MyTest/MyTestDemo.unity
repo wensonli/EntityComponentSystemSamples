@@ -1492,7 +1492,7 @@ PrefabInstance:
     - target: {fileID: 39934511310600746, guid: 6fb04a4c5cbe7214083326bd0db2be95,
         type: 3}
       propertyPath: m_Name
-      value: NPC
+      value: Ghost
       objectReference: {fileID: 0}
     - target: {fileID: 39934511310600747, guid: 6fb04a4c5cbe7214083326bd0db2be95,
         type: 3}
@@ -1543,6 +1543,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_PrimitiveSize.z
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 39934511310600747, guid: 6fb04a4c5cbe7214083326bd0db2be95,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4918068251034113317, guid: 6fb04a4c5cbe7214083326bd0db2be95,
         type: 3}
@@ -1673,7 +1678,7 @@ PrefabInstance:
     - target: {fileID: 1489094358969264332, guid: 9c0efdf948c05e247afae726b8964887,
         type: 3}
       propertyPath: m_Name
-      value: NpcBody
+      value: Body
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c0efdf948c05e247afae726b8964887, type: 3}

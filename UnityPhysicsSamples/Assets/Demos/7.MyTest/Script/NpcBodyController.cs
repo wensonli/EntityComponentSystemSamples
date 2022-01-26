@@ -39,11 +39,6 @@ public class NpcBodyController : MonoBehaviour, IReceiveEntity
         if (npcComponent.animalState == State.BOUNCE)
         {
             animatior.Play("Bounce");
-
-         //   npcComponent.animalState = State.IDLE;
-
-          //  World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData<NpcComponent>(m_DisplayEntity, npcComponent);
-
         }
         else
         {
