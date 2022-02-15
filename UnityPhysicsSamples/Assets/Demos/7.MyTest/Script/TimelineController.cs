@@ -47,7 +47,7 @@ public class TimelineController : MonoBehaviour
             var hasDialog = entityManager.HasComponent<NpcShowDialogComponent>(entites[i]);
 
             if (hasDialog)
-            {
+            {    
                 //  var npcData = entityManager.GetComponentData<NpcComponent>(entites[i]);
                 //todo liwen 
                 Play();

@@ -59,5 +59,7 @@ public class NpcAuthoring : MonoBehaviour, IConvertGameObjectToEntity
         }) ;
 
         txtNickName.text = nickName;
+
+        Debug.LogError("liwen NpcAuthoring ");
     }
 }

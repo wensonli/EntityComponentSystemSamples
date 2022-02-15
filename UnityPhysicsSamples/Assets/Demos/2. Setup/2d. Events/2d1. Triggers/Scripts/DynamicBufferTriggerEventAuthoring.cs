@@ -179,6 +179,8 @@ namespace Unity.Physics.Stateful
                 {
                     bufferFromEntity[triggerEvent.EntityB].Add(triggerEvent);
                 }
+
+                Debug.LogError("liwen add envent to buffer -------------------------");
             }
         }
 
@@ -255,6 +257,7 @@ namespace Unity.Physics.Stateful
                 .ForEach((ref DynamicBuffer<StatefulTriggerEvent> buffer) =>
                 {
                     buffer.Clear();
+
                 }).ScheduleParallel();
 
             SwapTriggerEventStates();
@@ -283,6 +286,7 @@ namespace Unity.Physics.Stateful
                 .ForEach((Entity e, ref DynamicBuffer<StatefulTriggerEvent> buffer) =>
                 {
                     entitiesWithBuffersMap.Add(e, 0);
+
                 }).Schedule(Dependency);
 
             Dependency = JobHandle.CombineDependencies(collectJobHandle, collectTriggerBuffersHandle);
@@ -298,7 +302,9 @@ namespace Unity.Physics.Stateful
 
                     UpdateTriggerEventState(previousFrameTriggerEvents, currentFrameTriggerEvents, triggerEventsWithStates);
                     AddTriggerEventsToDynamicBuffers(triggerEventsWithStates, ref triggerEventBufferFromEntity, entitiesWithBuffersMap);
+
                 }).Schedule();
+
 
             m_EndFramePhysicsSystem.AddInputDependency(Dependency);
             entitiesWithBuffersMap.Dispose(Dependency);
@@ -311,6 +317,8 @@ namespace Unity.Physics.Stateful
 
             public void Execute(TriggerEvent triggerEvent)
             {
+                Debug.LogError("liwen get trigger event ");
+
                 TriggerEvents.Add(new StatefulTriggerEvent(
                     triggerEvent.EntityA, triggerEvent.EntityB, triggerEvent.BodyIndexA, triggerEvent.BodyIndexB,
                     triggerEvent.ColliderKeyA, triggerEvent.ColliderKeyB));

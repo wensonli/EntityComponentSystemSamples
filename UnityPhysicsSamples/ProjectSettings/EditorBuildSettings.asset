@@ -298,4 +298,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Demos/7.MyTest/MyTestDemo.unity
     guid: 852fc79e904e9464094ed8fe68ef153e
+  - enabled: 1
+    path: Assets/Plugins/Pixel Crushers/Dialogue System/Demo/Scenes/DemoScene1.unity
+    guid: 955abf6400389cf4f8e68ac194db83e0
+  - enabled: 1
+    path: Assets/Plugins/Pixel Crushers/Dialogue System/Demo/Scenes/DemoScene2.unity
+    guid: d94b3c97c9dfe0d4e8ff547bb0406174
   m_configObjects: {}

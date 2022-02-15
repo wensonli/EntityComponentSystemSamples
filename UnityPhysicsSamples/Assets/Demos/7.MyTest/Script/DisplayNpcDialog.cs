@@ -12,10 +12,15 @@ public class DisplayNpcDialog : MonoBehaviour
 
     private Entity showDialogNpc;
 
+    private NodeGraphSpawner spawner;
+
+    private EntityManager entityManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
     }
 
     // Update is called once per frame
@@ -28,7 +33,6 @@ public class DisplayNpcDialog : MonoBehaviour
         }
 
 
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var entites = entityManager.GetAllEntities() ;
 
         for (int i = 0; i < entites.Length; i++)
@@ -37,13 +41,20 @@ public class DisplayNpcDialog : MonoBehaviour
 
             if (hasDialog)
             {
-                var npcData = entityManager.GetComponentData<NpcComponent>(entites[i]);
+                var system = World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
+                if (system != null)
+                {
+                    var npcData = system.GetSingleton<NodeGraphSpawner>();
 
-                text.text = $"{npcData.dialogContent}";
-                showDialogNpc = entites[i];
+                    text.text = npcData.Graph.Value.Nodes[0].Content.ToString();
+                    showDialogNpc = entites[i];
 
-                StartCoroutine(disapearDialog(showDialogNpc, npcData.showDialogDuration));
-                break;
+                    StartCoroutine(disapearDialog(showDialogNpc, 5f));
+
+                    break;
+                }
+        
+        
             }
         }
 
