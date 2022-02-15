@@ -179,8 +179,6 @@ namespace Unity.Physics.Stateful
                 {
                     bufferFromEntity[triggerEvent.EntityB].Add(triggerEvent);
                 }
-
-                Debug.LogError("liwen add envent to buffer -------------------------");
             }
         }
 
@@ -317,8 +315,6 @@ namespace Unity.Physics.Stateful
 
             public void Execute(TriggerEvent triggerEvent)
             {
-                Debug.LogError("liwen get trigger event ");
-
                 TriggerEvents.Add(new StatefulTriggerEvent(
                     triggerEvent.EntityA, triggerEvent.EntityB, triggerEvent.BodyIndexA, triggerEvent.BodyIndexB,
                     triggerEvent.ColliderKeyA, triggerEvent.ColliderKeyB));
