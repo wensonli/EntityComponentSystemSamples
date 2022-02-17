@@ -33,7 +33,6 @@ public class NodeConversion : GameObjectConversionSystem
             ref var root = ref builder.ConstructRoot<DialogTree>();
             var nodeArray = builder.Allocate(ref root.Nodes, authoringNodes.Length);
 
-            Debug.LogError($"liwen build authoringNodes {authoringNodes.Length}");
 
             for (int i = 0; i < nodeArray.Length; i++)
             {
@@ -42,8 +41,6 @@ public class NodeConversion : GameObjectConversionSystem
                 for (int j = 0; j < authoringNodes[i].links.Length; j++)
                 {
                     links[j] = Array.IndexOf(authoringNodes, authoringNodes[i].links[j]);
-
-                    Debug.LogError($"liwen build node {links[j]}");
                 }
             }
             return builder.CreateBlobAssetReference<DialogTree>(Allocator.Persistent);
@@ -66,11 +63,8 @@ public class NodeConversion : GameObjectConversionSystem
 
         var nodeGraph = BuildNodeGraph(authoringNodes);
 
-        Debug.LogError("liwen NodeConversion ");
-
         Entities.ForEach((GraphAuthoring npc) =>
         {
-            Debug.LogError("liwen add node graph");
             DstEntityManager.AddComponentData(GetPrimaryEntity(npc), new NodeGraphSpawner
             {
                 Graph = nodeGraph,

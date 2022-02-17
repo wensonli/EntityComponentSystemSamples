@@ -14,6 +14,7 @@ using UnityEngine;
 /// </summary>
 public struct NpcShowDialogComponent : IComponentData
 {
+    public int conversationID;
 }
 
 /// <summary>
@@ -89,9 +90,13 @@ public partial class NpcShowDialogSystem : SystemBase
                     if (HasComponent<NpcComponent>(triggerEvent.EntityB))
                     {
                         var showDialogComp = new NpcShowDialogComponent() ;
+                        var npcComponentData = GetComponent<NpcComponent>(triggerEvent.EntityB);
+
+                        showDialogComp.conversationID = npcComponentData.conversationID;
+
                         commandBuffer.AddComponent<NpcShowDialogComponent>(triggerEvent.EntityB, showDialogComp);
 
-                        var npcComponentData = GetComponent<NpcComponent>(triggerEvent.EntityB);
+                  
                         npcComponentData.animalState = State.BOUNCE;
                         commandBuffer.AddComponent<NpcComponent>(triggerEvent.EntityB, npcComponentData);
                     }

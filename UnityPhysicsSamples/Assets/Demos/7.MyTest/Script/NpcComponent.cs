@@ -16,6 +16,8 @@ namespace NpcSystem
         public FixedString128 dialogContent;
 
         public State animalState;
+
+        public int conversationID;
     }
 
     public enum State

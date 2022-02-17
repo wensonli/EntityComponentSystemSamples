@@ -554,6 +554,11 @@ PrefabInstance:
       propertyPath: dialogContent
       value: "\u6211\u611F\u53D7\u5230\u4E86\u5996\u6C14!"
       objectReference: {fileID: 0}
+    - target: {fileID: 4918068251034113317, guid: 6fb04a4c5cbe7214083326bd0db2be95,
+        type: 3}
+      propertyPath: conversationID
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6392402123483761464, guid: 6fb04a4c5cbe7214083326bd0db2be95,
         type: 3}
       propertyPath: Waypoints.Array.size
@@ -669,6 +674,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Graph
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370513392096613039, guid: b9816d6f1ede026419d33f6d2cba0ca5,
+        type: 3}
+      propertyPath: Content
+      value: hello player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9816d6f1ede026419d33f6d2cba0ca5, type: 3}

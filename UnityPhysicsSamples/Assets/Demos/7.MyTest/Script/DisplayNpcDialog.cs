@@ -18,11 +18,16 @@ public class DisplayNpcDialog : MonoBehaviour
 
     private Entity showDialogNpc;
 
-    private NodeGraphSpawner spawner;
-
     private EntityManager entityManager;
 
     private  int curDialogNodeIndex;
+
+    /// <summary>
+    /// 后续改成自动导入数据
+    /// </summary>
+    public List<ConversationDataBase> conversationDB;
+
+    private ConversationDataBase curConversationData;
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +56,28 @@ public class DisplayNpcDialog : MonoBehaviour
 
             if (hasDialog)
             {
-                var system = World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
+
+                var showDialogComponent = entityManager.GetComponentData<NpcShowDialogComponent>(entites[i]);
+
+                var conversationID = showDialogComponent.conversationID;
+
+                curConversationData = GetConversationData(conversationID);
+
+                if (curConversationData.conversations.Count > 0)
+                {
+                    text1.text = curConversationData.conversations[0].DialogText;
+
+                    showDialogNpc = entites[i];
+
+                    curDialogNodeIndex = 0;
+
+                    StartCoroutine(disapearDialog(showDialogNpc, 5f));
+                    break;
+                }
+
+       
+
+/*                var system = World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
                 if (system != null)
                 {
                     var npcData = system.GetSingleton<NodeGraphSpawner>();
@@ -65,7 +91,7 @@ public class DisplayNpcDialog : MonoBehaviour
                     StartCoroutine(disapearDialog(showDialogNpc, 5f));
 
                     break;
-                }
+                }*/
         
         
             }
@@ -85,14 +111,54 @@ public class DisplayNpcDialog : MonoBehaviour
 
     }
 
+    private ConversationDataBase GetConversationData(int id)
+    {
+        for (int i = 0; i < conversationDB.Count; i++)
+        {
+            if (id == conversationDB[i].ID)
+            {
+                return conversationDB[i];
+            }
+        }
+
+        return default;
+    }
+
     private void OnButtonClick()
     {
+
+        if (curDialogNodeIndex >= 0 && curDialogNodeIndex < curConversationData.conversations.Count)
+        {
+            var curDialogNode = curConversationData.conversations[curDialogNodeIndex];
+            text1.text = "";
+            text2.text = "";
+
+            if (curDialogNode.Links.Count != 0)
+            {
+                if (curDialogNode.Links.Count == 2)
+                {
+                    text2.text = curConversationData.conversations[curDialogNode.Links[1]].DialogText.ToString();
+                }
+                text1.text = curConversationData.conversations[curDialogNode.Links[0]].DialogText.ToString();
+
+                curDialogNodeIndex = curDialogNode.Links[0];
+            }
+            else
+            {
+                text1.text = "";
+                text2.text = "";
+
+                curDialogNodeIndex = 0;
+
+            }
+        }
+
+
+
+/*
         var system = World.DefaultGameObjectInjectionWorld.GetExistingSystem<SimulationSystemGroup>();
         if (system != null)
         {
-            Debug.LogError($"liwen onClick {curDialogNodeIndex}");
-
-
             var nodeGraphSpawner = system.GetSingleton<NodeGraphSpawner>();
 
             ref var dialogTree = ref nodeGraphSpawner.Graph.Value;
@@ -107,10 +173,8 @@ public class DisplayNpcDialog : MonoBehaviour
             {
                 if (curDialogNode.Links.Length == 2)
                 {
-                    Debug.LogError($"liwen 2 node {curDialogNode.Links[1]}");
                     text2.text = dialogTree.Nodes[curDialogNode.Links[1]].Content.ToString();
                 }
-                Debug.LogError($"liwen 1 node {curDialogNode.Links[0]}");
                 text1.text = dialogTree.Nodes[curDialogNode.Links[0]].Content.ToString();
 
                 curDialogNodeIndex = curDialogNode.Links[0];
@@ -124,7 +188,7 @@ public class DisplayNpcDialog : MonoBehaviour
 
             }
 
-        }
+        }*/
 
     }
 }

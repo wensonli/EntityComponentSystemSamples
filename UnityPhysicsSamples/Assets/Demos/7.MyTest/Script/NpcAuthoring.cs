@@ -29,6 +29,11 @@ public class NpcAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     /// </summary>
     public long showDialogDuration = 5;
 
+    /// <summary>
+    /// conversation id to database item
+    /// </summary>
+    public int conversationID;
+
     [SerializeField]
     private TextMesh txtNickName;
 
@@ -54,12 +59,11 @@ public class NpcAuthoring : MonoBehaviour, IConvertGameObjectToEntity
             id = id,
             nickName = nickName,
             showDialogDuration = showDialogDuration,
-            dialogContent = dialogContent
+            dialogContent = dialogContent,
+            conversationID = conversationID
 
-        }) ;
+        });
 
         txtNickName.text = nickName;
-
-        Debug.LogError("liwen NpcAuthoring ");
     }
 }
